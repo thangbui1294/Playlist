@@ -7,7 +7,7 @@ package Homework1;
  * Phil Ammirato
  * @author thangbui 
  */
-import java.util.Scanner;
+import java.util.*;
 
 public class PlaylistOperations {
 	/**
@@ -24,21 +24,26 @@ public class PlaylistOperations {
 			switch (menu) {
 			case 'a':
 			case 'A': {
-				SongRecord song = new SongRecord();
-				System.out.print("Enter the song title: ");
-				song.setTitle(s.nextLine());
-				System.out.print("Enter the song artist: ");
-				song.setArtist(s.nextLine());
-				System.out.print("Enter the song length (min): ");
-				song.setMin(s.nextInt());
-				System.out.print("Enter the song length (sec): ");
-				song.setSec(s.nextInt());
-				try {
+				try{
+					SongRecord song = new SongRecord();
+					System.out.print("Enter the song title: ");
+					song.setTitle(s.nextLine());
+					System.out.print("Enter the song artist: ");
+					song.setArtist(s.nextLine());
+					System.out.print("Enter the song length (min): ");
+					song.setMin(s.nextInt());
+					System.out.print("Enter the song length (sec): ");
+					song.setSec(s.nextInt());
 					System.out.print("Enter the position: ");
 					pl1.addSong(song, s.nextInt());
 					System.out.println("Song added: "+ song.getTitle() + " by " + song.getArtist());
 					System.out.println("# of song in the current Playlist " + pl1.getSize());
-				
+				}
+				catch (SecondInputException ex){
+					System.out.println("Wrong input for second");
+				}
+				catch (MinuteInputException ex){
+					System.out.println("Wrong input for min");
 				}
 				catch (IllegalArgumentException ex){
 					System.out.println("The position is not in valid range! ");
@@ -46,13 +51,16 @@ public class PlaylistOperations {
 				catch (FullPlaylistException ex){
 					System.out.println("The playlist is full. Remove to add another one ");
 				}
+				catch (InputMismatchException ex){
+					System.out.println("Wrong input type");
+				}
 				break;
 			}
 			case 'r':
 			case 'R': {
 				try {
-				System.out.print("Enter the song's position you want to remove: ");
-				pl1.removeSong(s.nextInt());
+					System.out.print("Enter the song's position you want to remove: ");
+					pl1.removeSong(s.nextInt());
 				}
 				catch (IllegalArgumentException ex){
 					System.out.println("The position is not in valid range! ");
@@ -86,8 +94,8 @@ public class PlaylistOperations {
 			case 'g':
 			case 'G':{
 				try{
-				System.out.print("Enter the postion of the song: ");
-				System.out.println(pl1.getSong(s.nextInt()));
+					System.out.print("Enter the postion of the song: ");
+					System.out.println(pl1.getSong(s.nextInt()));
 				}
 				catch (IllegalArgumentException ex){
 					System.out.println("The position is not in valid range! ");

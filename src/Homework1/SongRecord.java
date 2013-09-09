@@ -73,7 +73,7 @@ public class SongRecord {
 	 * @param sec
 	 * the length of the SongRecord in second 
 	 */
-	public void setSec(int sec){
+	public void setSec(int sec) throws SecondInputException{
 		if ((sec < 0) || (sec > 59))
 			throw new SecondInputException("Invalid second");
 		else
@@ -94,7 +94,7 @@ public class SongRecord {
 	 * @param min
 	 * the length of the SongRecord in minute 
 	 */
-	public void setMin(int min){
+	public void setMin(int min) throws MinuteInputException{
 		if (min < 0)
 			throw new MinuteInputException("Invalid minute");
 		this.min = min;
@@ -122,18 +122,37 @@ public class SongRecord {
 		return true;
 	}
 	
+	/**
+	 * Copies all data from a particular SongRecord into a new SongRecord Reference
+	 * Changing the original will not change the copy, and vice versa
+	 * @return
+	 * a copy of a SongRecord as an Object
+	 */
+	public Object clone(){
+		SongRecord cloned = new SongRecord();
+		if (this.title == null){
+			cloned.title = null;
+		}
+		else {
+			cloned.title = this.getArtist();
+		}
+		if (this.artist == null){
+			cloned.artist = null;
+		}
+		else {
+			cloned.artist = this.getArtist();
+		}
+		cloned.min = this.getMin();
+		cloned.sec = this.getSec();
+		return cloned;
+	}
+	
 	
 	public String toString(){
 		return "Song: " + this.getTitle() + " Artist: " + this.getArtist() + " Length: " + this.getMin() + ":" + this.getSec();
 	}
 	
 }
-class SecondInputException extends NumberFormatException{
-	public SecondInputException(){};
-	public SecondInputException(String s){};
-}
 
-class MinuteInputException extends NumberFormatException{
-	public MinuteInputException(){};
-	public MinuteInputException(String s){};
-}
+
+

@@ -18,9 +18,6 @@ public class Playlist {
 	public Playlist(){
 		songs = new SongRecord[MAX_LENGTH_OF_THE_LIST];
 	}
-	//public Object clone(){
-
-	//}
 
 	/**
 	 * Compares a particular object with a Playlist object; check for logical equivalence 
@@ -56,12 +53,14 @@ public class Playlist {
 	 * the SongRecord object to be added to current Playlist 
 	 * @param position
 	 * the position from the Playlist to add the SongRecord object to 
+	 * @throws IllegalArgumentException 
+	 * @throws FullPlaylistException 
 	 * @throws IllegalArugmentException 
 	 * if the position is not in valid range 
 	 * @throws FullPlayListException 
 	 * if the Playlist is full with 50 SongRecord songs 
 	 */
-	public void addSong(SongRecord song, int position) throws FullPlaylistException, IllegalArgumentException{
+	public void addSong(SongRecord song, int position) throws IllegalArgumentException, FullPlaylistException {
 		if (!((1 <= position) && (position <= this.size + 1)))
 			throw new IllegalArgumentException("Invalid range");
 		if (this.size == MAX_LENGTH_OF_THE_LIST) 
@@ -95,7 +94,7 @@ public class Playlist {
 	 * @throws IllegalArgumentException 
 	 * if the position is not in valid range 
 	 */
-	public SongRecord getSong(int position) throws IllegalArgumentException{
+	public SongRecord getSong(int position) throws IllegalArgumentException {
 		if (!((1 <= position) && (position <= size)))
 			throw new IllegalArgumentException("Invalid range");
 		return songs[position-1];
@@ -112,21 +111,56 @@ public class Playlist {
 	 * the name of the artist of the songs 
 	 * @return
 	 * the new playlist with all the songs from the artist as a Playlist 
-	 * @throws FullPlaylistException 
-	 * if the Playlist is full with 50 SongRecord songs 
-	 * @throws IllegalArgumentException
-	 * if the position is not in valid range  
 	 */
-	public static Playlist getSongsByArtist(Playlist originalList, String artist) throws IllegalArgumentException, FullPlaylistException{
-		if ((originalList == null) || (artist == null))
-			return null;
+	public static Playlist getSongsByArtist(Playlist originalList, String artist)  {
 		Playlist pl = new Playlist();
-		for (int i = 1; i <= originalList.getSize(); i++){
-			if (((originalList.getSong(i)).getArtist()).equals(artist)){
-				pl.addSong(originalList.getSong(i), pl.getSize() + 1);
+		try{
+			if ((originalList == null) || (artist == null))
+				return null;
+			for (int i = 1; i <= originalList.getSize(); i++){
+				if (((originalList.getSong(i)).getArtist()).equals(artist)){
+					pl.addSong(originalList.getSong(i), pl.getSize() + 1);
+				}
 			}
+
+		}
+		catch (IllegalArgumentException ex){
+			System.out.println("The position is not in valid range! ");
+		}
+		catch (FullPlaylistException ex){
+			System.out.println("The playlist is full. Remove to add another one ");
 		}
 		return pl;
+
+	}
+
+	public Object clone(){
+		/**
+		 * Copies all data from a particular Playlist into a new Playlist Reference
+		 * Changing the original will not change the copy, and vice versa
+		 * @return
+		 * a copy of a Playlis as an Object
+		 */
+		Playlist cloned = new Playlist();
+		cloned.size = this.size;
+		if (this.songs == null){
+			cloned.songs = null;
+		}
+		else {
+			for (int i = 0; i < this.getSize();i++){
+				try {
+					cloned.addSong(this.getSong(i+1), i +1);
+				}
+				catch (IllegalArgumentException ex){
+					System.out.println("The position is not in valid range! ");
+				}
+				catch (FullPlaylistException ex){
+					System.out.println("The playlist is full. Remove to add another one ");
+				}
+
+			}
+		}
+		return cloned;
 
 	}
 	/**
@@ -140,42 +174,5 @@ public class Playlist {
 			s = s + String.format("\n%-10d%-30s%-30s%-2d:%02d", i+1, songs[i].getTitle(),songs[i].getArtist(),songs[i].getMin(), songs[i].getSec());
 		}
 		return s;
-	}
-
-	class IllegalArgumentException extends Exception{
-		/**
-		 * Creates new default IllegalArgumentException exception
-		 */
-		public IllegalArgumentException(){
-			super("Invalid range of the position");
-		}
-
-		/**
-		 * Creates new IllegalArgumentException exception with a String parameter
-		 * @param message
-		 * the String for a new exception 
-		 */
-		public IllegalArgumentException(String message){
-			super(message);
-		}
-	}
-
-	class FullPlaylistException extends Exception{
-
-		/**
-		 * Creates new default FullPlaylistException exception
-		 */
-		public FullPlaylistException(){
-			super("The Playlist is full");
-		}
-
-		/**
-		 * Creates new FullPlaylistException exception with a String parameter
-		 * @param message
-		 * the String for a new exception 
-		 */
-		public FullPlaylistException(String message){
-			super(message);
-		}
-	}
+	}	
 }
