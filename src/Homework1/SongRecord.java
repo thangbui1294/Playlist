@@ -1,13 +1,16 @@
 package Homework1;
 /**
- * Thang Bui  
+ * Thang Bui 
  * 108848430
  * Homework #1
+ * thang.bui@stonybrook.edu 
  * CSE 214 Recitation R03
  * Phil Ammirato
  * @author thangbui 
+ * Creates SongRecord class which contains information about a particular audio files such as Title, Artist and length
  */
-public class SongRecord {
+
+public class SongRecord implements Cloneable{
 	private String title;
 	private String artist;
 	private int min;
@@ -134,13 +137,13 @@ public class SongRecord {
 			cloned.title = null;
 		}
 		else {
-			cloned.title = this.getArtist();
+			cloned.title = new String(this.getTitle());
 		}
 		if (this.artist == null){
 			cloned.artist = null;
 		}
 		else {
-			cloned.artist = this.getArtist();
+			cloned.artist = new String(this.getArtist());
 		}
 		cloned.min = this.getMin();
 		cloned.sec = this.getSec();

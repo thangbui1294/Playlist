@@ -3,14 +3,20 @@ package Homework1;
  * Thang Bui 
  * 108848430
  * Homework #1
+ * thang.bui@stonybrook.edu 
  * CSE 214 Recitation R03
  * Phil Ammirato
  * @author thangbui 
+ * Creates Playlist class to store all SongRecord objects that belong to a particular Playlist
  */
+
+
+ 
 public class Playlist {
 	private SongRecord[] songs;
 	private int size;
 	private final int MAX_LENGTH_OF_THE_LIST = 50;
+	private String name;
 
 	/** 
 	 * Creates a new Playlist object with maximum capacity is 50 songs 
@@ -45,6 +51,24 @@ public class Playlist {
 	 */
 	public int getSize(){
 		return size;
+	}
+	
+	/**
+	 * Receives the name of the Playlist
+	 * @return
+	 * the name will be returned as a String
+	 */
+	public String getName(){
+		return name;
+	}
+	
+	/**
+	 * Sets name for a particular Playlist
+	 * @param name
+	 * new name for the Playlist 
+	 */
+	public void setName(String name){
+		this.name = name;
 	}
 
 	/**
@@ -133,23 +157,24 @@ public class Playlist {
 		return pl;
 
 	}
-
+	
+	/**
+	 * Copies all data from a particular Playlist into a new Playlist Reference
+	 * Changing the original will not change the copy, and vice versa
+	 * @return
+	 * a copy of a Playlis as an Object
+	 */
 	public Object clone(){
-		/**
-		 * Copies all data from a particular Playlist into a new Playlist Reference
-		 * Changing the original will not change the copy, and vice versa
-		 * @return
-		 * a copy of a Playlis as an Object
-		 */
 		Playlist cloned = new Playlist();
-		cloned.size = this.size;
 		if (this.songs == null){
 			cloned.songs = null;
 		}
 		else {
-			for (int i = 0; i < this.getSize();i++){
+			for (int i = 1; i <= this.getSize();i++){
 				try {
-					cloned.addSong(this.getSong(i+1), i +1);
+					SongRecord song = new SongRecord();
+					song = (SongRecord)((this.getSong(i)).clone());
+					cloned.addSong(song, i);
 				}
 				catch (IllegalArgumentException ex){
 					System.out.println("The position is not in valid range! ");
@@ -160,6 +185,7 @@ public class Playlist {
 
 			}
 		}
+		cloned.size = this.size;
 		return cloned;
 
 	}
